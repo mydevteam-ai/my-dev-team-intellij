@@ -43,6 +43,10 @@ dependencies {
 }
 
 intellijPlatform {
+    // Bytecode instrumentation only matters for UI Designer forms and JB
+    // nullability assertions, neither of which this plugin uses; it also needs
+    // a JetBrains Runtime the build host may not have.
+    instrumentCode = false
     pluginConfiguration {
         id = "ai.mydevteam.intellij"
         name = "My Dev Team"
