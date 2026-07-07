@@ -3,8 +3,8 @@
 // the protocol discipline (wire-serializable plain data only) is enforced by
 // the module boundary.
 plugins {
-    kotlin("jvm") version "2.0.21"
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 repositories {
@@ -29,4 +29,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // A wire test that deadlocks must fail with a stack trace, not hang the
+    // build: coroutine timeouts cannot interrupt a blocking pipe read, so the
+    // safety net lives at the JUnit level.
+    systemProperty("junit.jupiter.execution.timeout.default", "30 s")
+    testLogging {
+        events("passed", "failed", "skipped")
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }

@@ -16,13 +16,13 @@ import java.io.OutputStream
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NdjsonChannel(
-    output: OutputStream,
-    input: InputStream,
+    private val rawOutput: OutputStream,
+    private val rawInput: InputStream,
     private val onMessage: (JsonObject) -> Unit,
     private val onClose: (reason: String) -> Unit,
 ) : AutoCloseable {
-    private val writer: BufferedWriter = output.bufferedWriter(Charsets.UTF_8)
-    private val reader: BufferedReader = input.bufferedReader(Charsets.UTF_8)
+    private val writer: BufferedWriter = rawOutput.bufferedWriter(Charsets.UTF_8)
+    private val reader: BufferedReader = rawInput.bufferedReader(Charsets.UTF_8)
     private val closed = AtomicBoolean(false)
 
     private val readerThread = Thread({
@@ -61,14 +61,23 @@ class NdjsonChannel(
 
     override fun close() {
         fireClose("channel disposed")
+        // Close the raw streams, never the buffered wrappers: the reader thread
+        // holds the BufferedReader's internal lock while it is blocked in
+        // readLine, and BufferedReader.close waits (uninterruptibly) for that
+        // same lock - closing it from this thread would deadlock. Closing the
+        // underlying stream instead wakes the blocked read with EOF/"Pipe
+        // closed" and the reader thread exits on its own.
         try {
-            writer.close()
+            synchronized(writer) { writer.flush() }
         } catch (ignored: Exception) {
         }
         try {
-            reader.close()
+            rawOutput.close()
         } catch (ignored: Exception) {
         }
-        readerThread.interrupt()
+        try {
+            rawInput.close()
+        } catch (ignored: Exception) {
+        }
     }
 }
