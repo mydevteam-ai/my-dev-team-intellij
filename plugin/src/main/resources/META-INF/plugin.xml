@@ -1,0 +1,18 @@
+<idea-plugin>
+    <id>ai.mydevteam.intellij</id>
+    <name>My Dev Team</name>
+    <vendor>mydevteam-ai</vendor>
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="My Dev Team"
+                    anchor="right"
+                    icon="AllIcons.Toolwindows.ToolWindowMessages"
+                    factoryClass="ai.mydevteam.intellij.ui.DevTeamToolWindowFactory"/>
+        <applicationConfigurable parentId="tools"
+                                 id="ai.mydevteam.intellij.settings"
+                                 displayName="My Dev Team"
+                                 instance="ai.mydevteam.intellij.settings.DevTeamConfigurable"/>
+        <notificationGroup id="My Dev Team" displayType="BALLOON"/>
+    </extensions>
+</idea-plugin>
