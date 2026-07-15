@@ -58,7 +58,7 @@
   <div id="transcript"></div>
   <div id="status"></div>
   <div id="inputRow">
-    <textarea id="prompt" placeholder="Describe what to build... (/clear resets the conversation)"></textarea>
+    <textarea id="prompt" placeholder="Describe what to build... (/clear resets; &quot;btw ...&quot; or /ask asks a side question kept out of the conversation)"></textarea>
     <button id="send">Send</button>
     <button id="stop" class="secondary" style="display:none">Stop</button>
   </div>
@@ -227,7 +227,8 @@ window.devteam = {
     switch (msg.kind) {
       case "user": {
         const wrap = el("div", "msg");
-        wrap.appendChild(el("div", "label", "You"));
+        wrap.appendChild(el("div", "label",
+          msg.aside ? "You - side question (kept out of the conversation)" : "You"));
         wrap.appendChild(el("div", "user", msg.text));
         transcript.appendChild(wrap);
         beginRun();

@@ -7,6 +7,7 @@
  */
 package ai.mydevteam.intellij.ui
 
+import ai.mydevteam.core.chat.SideQuestions
 import ai.mydevteam.core.protocol.wireJson
 import ai.mydevteam.core.sidecar.RunOutcome
 import com.intellij.openapi.Disposable
@@ -79,6 +80,12 @@ class ChatPanel(
                 post(buildJsonObject {
                     put("kind", "user")
                     put("text", text)
+                    // A side question ("/ask" or a leading "btw") is labelled in
+                    // the transcript; the routing itself happens in the
+                    // controller with the same detection.
+                    if (SideQuestions.questionOf(text) != null) {
+                        put("aside", true)
+                    }
                 })
                 controller.send(
                     prompt = text,
