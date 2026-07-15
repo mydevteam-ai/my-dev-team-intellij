@@ -35,8 +35,24 @@ sibling VS Code repo checkout (`sidecarDist` in `gradle.properties`).
 ./gradlew :plugin:runIde    # sandbox IDE with the plugin
 ```
 
+## Usage notes
+
+- **Side questions.** Start a chat message with `btw` (or `/ask`) to ask a
+  quick question that is answered in place but never joins the conversation:
+  it runs with no history and is excluded from later turns, so mid-task
+  curiosity cannot derail the ongoing work. Only a leading `btw` counts; a
+  sentence merely containing it is handled normally. Because the answer never
+  joins the conversation, it cannot be followed up on - ask side questions
+  self-contained.
+- **Quick question while the agent is busy.** `Ctrl+Alt+Q` (`Cmd+Alt+Q` on
+  macOS), or Tools > My Dev Team: Ask a Quick Question, asks a side question
+  outside the chat: the answer streams into a read-only-style editor tab while
+  the chat run keeps going, and the background task's cancel button stops it.
+  Quick questions never read or change your files.
+
 ## Status
 
 Phase 1 walking skeleton: chat tool window, sidecar handshake, streamed
-answers, read + search tools. See the VS Code repo's docs/DESIGN.md for the
-protocol and the roadmap.
+answers, read + search tools, side questions (`btw`/`/ask` + the quick-question
+action). See the VS Code repo's docs/DESIGN.md for the protocol and the
+roadmap.

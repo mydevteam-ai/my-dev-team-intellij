@@ -15,4 +15,17 @@
                                  instance="ai.mydevteam.intellij.settings.DevTeamConfigurable"/>
         <notificationGroup id="My Dev Team" displayType="BALLOON"/>
     </extensions>
+
+    <actions>
+        <!-- The side-question hotkey: works while a chat turn is still
+             streaming, since the sidecar multiplexes runs. -->
+        <action id="MyDevTeam.QuickQuestion"
+                class="ai.mydevteam.intellij.actions.QuickQuestionAction"
+                text="My Dev Team: Ask a Quick Question"
+                description="Ask a side question; the answer opens in an editor tab and never joins the chat conversation.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt Q"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta alt Q"/>
+        </action>
+    </actions>
 </idea-plugin>
